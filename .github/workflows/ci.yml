@@ -60,9 +60,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: yannh/kubeconform-action@v1
-        with:
-          args: "-strict -summary k8s/deployment.yaml k8s/service.yaml"
+      - name: kubeconform
+        run: |
+          curl -sSL -o /tmp/kubeconform.tar.gz \
+            https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz
+          tar -xzf /tmp/kubeconform.tar.gz -C /tmp
+          /tmp/kubeconform -strict -summary k8s/deployment.yaml k8s/service.yaml
 
   keras:
     name: Keras MLP
@@ -73,13 +76,8 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: |
-            requirements.txt
-            requirements-dev.txt
-            requirements-dl.txt
+          cache-dependency-path: requirements-dl.txt
       - name: Install dependencies
-        run: |
-          pip install -r requirements-dev.txt
-          pip install -r requirements-dl.txt
+        run: pip install -r requirements-dl.txt
       - name: Pytest Keras
         run: python -m pytest tests/test_keras.py --override-ini addopts=

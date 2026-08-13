@@ -52,7 +52,8 @@ def create_flask_app(service: ModelService | None = None) -> Flask:
         except ValidationError as exc:
             return {"detail": exc.errors()}, 422
         try:
-            return current.predict(payload), 200
+            result: dict[str, object] = dict(current.predict(payload))
+            return result, 200
         except ModelNotLoadedError as exc:
             return {"detail": str(exc)}, 503
 

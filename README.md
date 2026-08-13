@@ -113,6 +113,7 @@ flask --app app.flask_app:create_flask_app run --port 8001
 ### Keras / TensorFlow (opcional, CPU)
 
 ```powershell
+# Ambiente separado: TensorFlow CPU nao fecha com o numpy do recorte XGBoost.
 pip install -r requirements-dl.txt
 python -m ml.train_keras
 ```

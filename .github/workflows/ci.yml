@@ -42,8 +42,8 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-python@v7
       - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
@@ -54,3 +54,32 @@ jobs:
         run: pip install -r requirements-dev.txt
       - name: Pytest
         run: python -m pytest
+
+  manifests:
+    name: Kubernetes manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: yannh/kubeconform-action@v1
+        with:
+          args: "-strict -summary k8s/deployment.yaml k8s/service.yaml"
+
+  keras:
+    name: Keras MLP
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+            requirements-dl.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements-dev.txt
+          pip install -r requirements-dl.txt
+      - name: Pytest Keras
+        run: python -m pytest tests/test_keras.py --override-ini addopts=

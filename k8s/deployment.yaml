@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jurimetria-ml
+  labels:
+    app: jurimetria-ml
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jurimetria-ml
+  template:
+    metadata:
+      labels:
+        app: jurimetria-ml
+    spec:
+      containers:
+        - name: api
+          image: jurimetria-ml:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

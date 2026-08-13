@@ -5,9 +5,7 @@
 
 ## Contexto
 
-O ciclo clássico de ML (treino, validação, predição e métricas) existe em um pipeline privado. Publicar esse código inteiro misturaria produto, schema e risco de dados. Um clone também seria difícil de revisar: volume alto, dependências de banco e regras de negócio.
-
-O portfólio público precisava de um recorte que um recrutador consiga clonar, treinar e chamar `/predict` em minutos.
+Criar um repositório público com o ciclo clássico de ML (treino, validação, predição e métricas) semelhante ao que implementei no sistema "sj-pipeline-bi".
 
 ## Decisão
 

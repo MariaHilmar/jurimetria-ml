@@ -136,7 +136,7 @@ A imagem treina o modelo no build (dataset sintético, seed fixa) para o contain
 
 ## Decisão de desenho
 
-O dataset sintético e o recorte deliberado estão em [`docs/adr/001-dataset-sintetico.md`](docs/adr/001-dataset-sintetico.md).
+O dataset sintético e o recorte deliberado estão em [`docs/adr/001-dataset-sintetico.md`](docs/adr/001-dataset-sintetico.md). Flask, Keras e Kubernetes: [`docs/adr/002-extras-flask-keras-k8s.md`](docs/adr/002-extras-flask-keras-k8s.md).
 
 ## Licença
 

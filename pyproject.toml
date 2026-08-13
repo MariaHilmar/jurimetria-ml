@@ -1,0 +1,42 @@
+[project]
+name = "jurimetria-ml"
+version = "0.1.0"
+description = "Recorte de portfólio: ciclo clássico de ML (dataset sintético, treino, métricas e API /predict)."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+exclude = [".git", ".mypy_cache", ".pytest_cache", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "C", "B"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"app/main.py" = ["B008"]
+
+[tool.coverage.run]
+omit = ["ml/__main__.py"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "--cov=app --cov=ml --cov-report=term-missing --cov-fail-under=85"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+check_untyped_defs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]

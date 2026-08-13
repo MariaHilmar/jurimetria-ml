@@ -4,7 +4,7 @@ Recorte público do **ciclo clássico de Machine Learning**: gerar dados, treina
 
 Não é um modelo de desfecho judicial real. Não é o pipeline de produção do Situação Jurídica. O dataset é **sintético**, com um processo generativo conhecido, para o recrutador conseguir clicar, treinar e inspecionar métricas sem dados sigilosos.
 
-O [JurisSync](https://github.com/MariaHilmar/juris-sync) cobre jurimetria **descritiva** (agregações SQL). Este repositório cobre a fatia **preditiva** (sklearn + XGBoost + FastAPI).
+O [JurisSync](https://github.com/MariaHilmar/juris-sync) cobre jurimetria **descritiva** (agregações SQL). Este repositório cobre a fatia **preditiva** (sklearn + XGBoost + FastAPI), com evidências extras de Flask, Keras e manifests Kubernetes.
 
 [![CI](https://github.com/MariaHilmar/jurimetria-ml/actions/workflows/ci.yml/badge.svg)](https://github.com/MariaHilmar/jurimetria-ml/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
@@ -23,16 +23,20 @@ dataset sintético -> split estratificado -> pipeline sklearn
 |------|------|
 | Coleta / features | `ml/dataset.py`, `ml/features.py` |
 | Treino e validação | `ml/train.py` |
-| Predição | `POST /predict` |
+| Predição | `POST /predict` (FastAPI) e `app/flask_app.py` (Flask) |
 | Monitoramento do modelo | `GET /metrics`, `GET /health` |
-| Testes | `tests/` (dataset, treino, API) |
+| Deep learning (opcional) | `python -m ml.train_keras` (Keras/TensorFlow CPU, 1 época) |
+| Kubernetes | `k8s/` (Deployment + Service + probes em `/health`) |
+| Testes | `tests/` (dataset, treino, API, Flask, manifests) |
 
 ## Fora de escopo (de propósito)
 
 - Dados reais de processos, tribunais ou escritórios
 - Coleta Escavador / DataJud
 - NLP, OCR, dbt, multi-tenant, model registry de produto
-- TensorFlow, Keras, PyTorch, Django
+- Django, SOAP, T-SQL Server (não fazem parte deste recorte)
+
+TensorFlow/Keras entram só como **extra opcional** (`requirements-dl.txt`), não como substituto do XGBoost.
 
 Essas peças, quando existem, ficam no produto privado. Aqui o objetivo é um recorte **legível em uma revisão de PR**.
 
@@ -41,11 +45,11 @@ Essas peças, quando existem, ficam no produto privado. Aqui o objetivo é um re
 | Camada | Tecnologia |
 |--------|------------|
 | Dados | Pandas, NumPy |
-| Modelo | scikit-learn (pipeline, calibração) + XGBoost |
-| API | FastAPI + Pydantic v2 |
+| API | FastAPI (principal) + Flask (mesmo contrato) |
+| Modelo | scikit-learn + XGBoost; Keras/TensorFlow opcional |
 | Artefato | joblib |
 | Qualidade | pytest, Ruff, Black, Mypy |
-| Runtime | Python 3.12, Docker opcional |
+| Runtime | Python 3.12, Docker opcional, manifests em `k8s/` |
 
 ## Como rodar
 
@@ -98,6 +102,30 @@ mypy app ml
 
 A suíte treina um modelo pequeno em diretório temporário. Não depende de artefato commitado.
 
+### Flask (mesmo contrato)
+
+```powershell
+pip install -r requirements-dev.txt
+python -m ml.train
+flask --app app.flask_app:create_flask_app run --port 8001
+```
+
+### Keras / TensorFlow (opcional, CPU)
+
+```powershell
+# Ambiente separado: TensorFlow CPU nao fecha com o numpy do recorte XGBoost.
+pip install -r requirements-dl.txt
+python -m ml.train_keras
+```
+
+### Kubernetes
+
+Manifests em `k8s/` (Deployment, Service, probes em `/health`). Validação no CI com kubeconform. Não exige cluster na nuvem.
+
+```powershell
+kubectl apply -k k8s/
+```
+
 ## Docker
 
 ```powershell
@@ -109,7 +137,7 @@ A imagem treina o modelo no build (dataset sintético, seed fixa) para o contain
 
 ## Decisão de desenho
 
-O dataset sintético e o recorte deliberado estão em [`docs/adr/001-dataset-sintetico.md`](docs/adr/001-dataset-sintetico.md).
+O dataset sintético e o recorte deliberado estão em [`docs/adr/001-dataset-sintetico.md`](docs/adr/001-dataset-sintetico.md). Flask, Keras e Kubernetes: [`docs/adr/002-extras-flask-keras-k8s.md`](docs/adr/002-extras-flask-keras-k8s.md).
 
 ## Licença
 

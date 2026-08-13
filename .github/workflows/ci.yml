@@ -80,4 +80,4 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dl.txt
       - name: Pytest Keras
-        run: python -m pytest tests/test_keras.py --override-ini addopts=
+        run: python -m pytest tests/test_keras.py --noconftest --override-ini addopts=

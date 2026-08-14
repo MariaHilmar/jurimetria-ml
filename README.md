@@ -2,7 +2,7 @@
 
 Recorte público do **ciclo clássico de Machine Learning**: gerar dados, treinar, avaliar e servir predição via API.
 
-Não é um modelo de desfecho judicial real. Não é o pipeline de produção do Situação Jurídica. O dataset é **sintético**, com um processo generativo conhecido, para o recrutador conseguir clicar, treinar e inspecionar métricas sem dados sigilosos.
+Não é um modelo de desfecho judicial real. Não é o pipeline de produção do Situação Jurídica. O dataset é **sintético**, com um processo generativo conhecido, sem dados sigilosos.
 
 O [JurisSync](https://github.com/MariaHilmar/juris-sync) cobre jurimetria **descritiva** (agregações SQL). Este repositório cobre a fatia **preditiva** (sklearn + XGBoost + FastAPI), com evidências extras de Flask, Keras e manifests Kubernetes.
 

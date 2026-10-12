@@ -1,8 +1,8 @@
 # Extra isolado do recorte XGBoost. TensorFlow CPU exige numpy<2.2;
 # o requirements.txt principal usa numpy>=2.5. Nao incluir -r requirements.txt.
-pandas>=2.2,<3
-numpy>=1.26,<2.2
-scikit-learn>=1.5,<1.8
-keras>=3.5
-tensorflow-cpu>=2.19,<2.20
+pandas>=3.0.6,<4
+numpy>=2.5.3,<2.6
+scikit-learn>=1.9.1,<1.10
+keras>=3.15.1
+tensorflow-cpu>=2.21.0,<2.22
 pytest>=8.3
